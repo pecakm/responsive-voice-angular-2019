@@ -11,6 +11,11 @@ import { CONSTANTS } from 'src/app/helpers/constants';
 })
 export class VoiceComponent implements OnInit {
   speech = new Speech();
+  voiceStarted = false;
+  voicePaused = false;
+  fromValue: string;
+  toValue: string;
+  pdfFile: File;
   pdfText: string;
 
   constructor(
@@ -21,9 +26,7 @@ export class VoiceComponent implements OnInit {
     if (this.speech.hasBrowserSupport()) {
       this.speech.init({
         voice: CONSTANTS.VOICE
-      }).then(
-        () => this.getText()
-      ).catch(
+      }).catch(
         () => this.setAppleVoice()
       );
     }
@@ -32,21 +35,56 @@ export class VoiceComponent implements OnInit {
   setAppleVoice() {
     this.speech.init({
       rate: 0.85
-    }).then(
-      () => this.getText()
-    );
-  }
-
-  speak() {
-    this.speech.speak({
-      text: this.pdfText
     });
   }
 
-  getText() {
-    this.pdfService.getText().subscribe(
+  fileSelected(event) {
+		if (event.target.files[0] != null) {
+      this.pdfFile = event.target.files[0];
+      this.sendData(event.target.files[0]);
+		}
+  }
+
+  sendData(pdfFile: File) {
+    let pdfInfo = new FormData();
+    
+    pdfInfo.append('from', this.fromValue);
+    pdfInfo.append('to', this.toValue);
+    pdfInfo.append('pdfFile', pdfFile, pdfFile.name);
+
+    this.pdfService.getText(pdfInfo).subscribe(
       text => this.pdfText = text,
       () => this.pdfText = 'Coś poszło nie tak.'
     );
+  }
+
+  rangeChange() {
+    if (this.pdfFile != null) {
+      this.pdfText = null;
+    }
+  }
+
+  speak() {
+    if (this.voiceStarted) {
+      if (this.voicePaused) {
+        this.speech.resume();
+        this.voicePaused = false;
+      } else {
+        this.speech.pause();
+        this.voicePaused = true;
+      }
+    } else {
+      this.speech.speak({
+        text: this.pdfText
+      });
+      this.voiceStarted = true;
+    }
+  }
+
+  reload() {
+    this.speech.cancel();
+    this.voiceStarted = false;
+    this.voicePaused = false;
+    this.sendData(this.pdfFile);
   }
 }

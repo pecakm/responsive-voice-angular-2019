@@ -13,8 +13,8 @@ export class PdfService {
   constructor(
     private http: HttpClient
   ) { }
-
-  getText(): Observable<string> {
-		return this.http.get<string>(this.getTextUrl);
-	}
+  
+  getText(pdfInfo: FormData): Observable<string> {
+    return this.http.post<string>(this.getTextUrl, pdfInfo);
+  }
 }

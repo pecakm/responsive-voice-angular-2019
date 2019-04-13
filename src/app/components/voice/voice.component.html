@@ -1,1 +1,21 @@
-<button (click)="speak()">Speak</button>
+<div>
+    <input
+        type="number"
+        placeholder="Od"
+        [(ngModel)]="fromValue"
+        (ngModelChange)="rangeChange()"
+    >
+    <input
+        type="number"
+        placeholder="Do"
+        [(ngModel)]="toValue"
+        (ngModelChange)="rangeChange()"
+    >
+</div>
+<div>
+    <input type="file" accept="application/pdf" (change)="fileSelected($event)">
+</div>
+<div>
+    <button *ngIf="!pdfText" (click)="reload()">Przeładuj</button>
+    <button *ngIf="pdfText" (click)="speak()">Odtwarzaj / Pauza</button>
+</div>
