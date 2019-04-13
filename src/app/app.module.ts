@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { VoiceComponent } from './voice/voice.component';
+import { AppComponent } from './components/app/app.component';
+import { VoiceComponent } from './components/voice/voice.component';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { VoiceComponent } from './voice/voice.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
