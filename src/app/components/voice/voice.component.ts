@@ -34,7 +34,7 @@ export class VoiceComponent implements OnInit {
 
   setAppleVoice() {
     this.speech.init({
-      rate: 0.85
+      rate: 0.9
     });
   }
 
