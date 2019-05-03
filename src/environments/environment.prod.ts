@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backendUrl: 'https://ola-api.itpulse.pl/'
+  backendUrl: 'https://ola.itpulse.pl:3001/'
 };
